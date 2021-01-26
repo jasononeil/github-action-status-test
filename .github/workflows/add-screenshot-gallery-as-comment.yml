@@ -5,9 +5,12 @@ on:
 jobs:
   add_screenshot_gallery_link_as_comment:
     runs-on: ubuntu-latest
-    if: github.event.status.state == 'success'
     steps:
       - uses: actions/checkout@v1
+
+      - run: echo "Commit status is ${STATE}"
+        env:
+          STATE: ${{ github.event.status.state }
 
       - name: Find relevant PR
         uses: jwalton/gh-find-current-pr@v1
