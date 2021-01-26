@@ -1,0 +1,53 @@
+name: add screenshot gallery link as comment
+on:
+  - status
+
+jobs:
+  add_screenshot_gallery_link_as_comment:
+    runs-on: ubuntu-latest
+    if: github.event.status.state == 'success'
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Find relevant PR
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: echo "Your PR is ${PR}"
+        if: success() && steps.findPr.outputs.pr
+        env:
+          PR: ${{ steps.findPr.outputs.pr }
+
+      - name: Check if there is an existing comment
+        if: success() && steps.findPr.outputs.pr
+        uses: peter-evans/find-comment@v1
+        id: find_comment
+        with:
+          issue-number: ${{ steps.findPr.outputs.pr }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '[View the Screenshot Gallery][1]'
+
+      - name: Create a mew comment
+        if: ${{ steps.find_comment.outputs.comment-id == 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ steps.findPr.outputs.pr }}
+          body: |
+            :sparkles: [View the Screenshot Gallery][1] :sparkles:
+
+            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.sha }}/index.html
+
+      - name: Update an existing comment
+        if: ${{ steps.find_comment.outputs.comment-id != 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.find_comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            :sparkles: [View the Screenshot Gallery][1] :sparkles:
+
+            For commit ${{ github.sha }}
+
+            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.sha }}/index.html
