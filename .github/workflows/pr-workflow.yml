@@ -1,0 +1,14 @@
+name: test push workflow
+on:
+  - pull_request
+
+
+jobs:
+  my_pr_workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - run: echo "Your PR is ${PR}"
+        env:
+          PR: ${{ github.event.pull_request.number }}
