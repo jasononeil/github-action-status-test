@@ -1,6 +1,7 @@
 name: test push workflow
 on:
   - pull_request
+  - push
 
 
 jobs:
@@ -11,4 +12,4 @@ jobs:
 
       - run: echo "Your PR is ${PR}"
         env:
-          PR: ${{ github.event.pull_request.number }}
+          PR: ${{ github.event.pull_request.number || github.sha }}
