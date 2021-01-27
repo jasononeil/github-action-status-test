@@ -5,7 +5,6 @@ on:
 jobs:
   add_screenshot_gallery_link_as_comment:
     runs-on: ubuntu-latest
-    if: github.event.commit.commit.state == 'success'
     steps:
       - uses: actions/checkout@v1
 
@@ -19,6 +18,7 @@ jobs:
           STATE: ${{ github.event.commit.commit.state }}
 
       - name: Find relevant PR
+        if: github.event.commit.commit.state == 'success'
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
