@@ -10,8 +10,11 @@ jobs:
 
       - name: Dump GitHub context
         env:
-          GITHUB_CONTEXT: ${{ toJSON(github.event) }}
-        run: echo "$GITHUB_CONTEXT"
+          SHA: ${{ toJSON(github.event.sha) }}
+          CONTEXT: ${{ toJSON(github.event.context) }}
+          STATE: ${{ toJSON(github.event.state) }}
+          MESSAGE: ${{ toJSON(github.event.commit.commit.message) }}
+        run: echo "stuff: $SHA $STATE $CONTEXT $MESSAGE"
 
       - run: echo "Commit status is ${STATE}"
         env:
