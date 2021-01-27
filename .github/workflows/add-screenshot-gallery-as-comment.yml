@@ -5,6 +5,7 @@ on:
 jobs:
   add_screenshot_gallery_link_as_comment:
     runs-on: ubuntu-latest
+    if: github.event.commit.commit.state == "success"
     steps:
       - uses: actions/checkout@v1
 
@@ -13,24 +14,15 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJSON(job) }}
-        run: echo "$JOB_CONTEXT"
-
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-        run: echo "$STEPS_CONTEXT"
-
       - run: echo "Commit status is ${STATE}"
         env:
-          STATE: ${{ github.event.status.state }}
+          STATE: ${{ github.event.commit.commit.state }}
 
       - name: Find relevant PR
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
+          sha: ${{ github.event.commit.commit.sha }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: echo "Your PR is ${PR}"
