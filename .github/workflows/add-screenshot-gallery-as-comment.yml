@@ -19,16 +19,16 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: echo "Your PR is ${PR}"
-        if: success() && steps.findPr.outputs.pr
+        if: success() && steps.findPr.outputs.number
         env:
-          PR: ${{ steps.findPr.outputs.pr }}
+          PR: ${{ steps.findPr.outputs.number }}
 
       - name: Check if there is an existing comment
-        if: success() && steps.findPr.outputs.pr
+        if: success() && steps.findPr.outputs.number
         uses: peter-evans/find-comment@v1
         id: find_comment
         with:
-          issue-number: ${{ steps.findPr.outputs.pr }}
+          issue-number: ${{ steps.findPr.outputs.number }}
           comment-author: 'github-actions[bot]'
           body-includes: '[View the Screenshot Gallery][1]'
 
@@ -36,7 +36,7 @@ jobs:
         if: ${{ steps.find_comment.outputs.comment-id == 0 }}
         uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: ${{ steps.findPr.outputs.pr }}
+          issue-number: ${{ steps.findPr.outputs.number }}
           body: |
             :sparkles: [View the Screenshot Gallery][1] :sparkles:
 
