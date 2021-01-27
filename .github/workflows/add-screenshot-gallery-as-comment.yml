@@ -15,14 +15,14 @@ jobs:
 
       - run: echo "Commit status is ${STATE}"
         env:
-          STATE: ${{ github.event.commit.commit.state }}
+          STATE: ${{ github.event.commit.state }}
 
       - name: Find relevant PR
-        if: github.event.commit.commit.state == 'success'
+        if: github.event.commit.state == 'success'
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
-          sha: ${{ github.event.commit.commit.sha }}
+          sha: ${{ github.event.commit.sha }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: echo "Your PR is ${PR}"
@@ -47,9 +47,9 @@ jobs:
           body: |
             :sparkles: [View the Screenshot Gallery][1] :sparkles:
 
-            For commit ${{ github.event.commit.commit.sha }}
+            For commit ${{ github.event.commit.sha }}
 
-            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.event.commit.commit.sha }}/index.html
+            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.event.commit.sha }}/index.html
 
       - name: Update an existing comment
         if: steps.find_comment.outputs.comment-id != 0
@@ -60,6 +60,6 @@ jobs:
           body: |
             :sparkles: [View the Screenshot Gallery][1] :sparkles:
 
-            For commit ${{ github.event.commit.commit.sha }}
+            For commit ${{ github.event.commit.sha }}
 
-            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.event.commit.commit.sha }}/index.html
+            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.event.commit.sha }}/index.html
