@@ -5,7 +5,7 @@ on:
 jobs:
   add_screenshot_gallery_link_as_comment:
     runs-on: ubuntu-latest
-    if: github.event.commit.commit.state == "success"
+    if: github.event.commit.commit.state == 'success'
     steps:
       - uses: actions/checkout@v1
 
@@ -47,7 +47,9 @@ jobs:
           body: |
             :sparkles: [View the Screenshot Gallery][1] :sparkles:
 
-            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.sha }}/index.html
+            For commit ${{ github.event.commit.commit.sha }}
+
+            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.event.commit.commit.sha }}/index.html
 
       - name: Update an existing comment
         if: steps.find_comment.outputs.comment-id != 0
@@ -58,6 +60,6 @@ jobs:
           body: |
             :sparkles: [View the Screenshot Gallery][1] :sparkles:
 
-            For commit ${{ github.sha }}
+            For commit ${{ github.event.commit.commit.sha }}
 
-            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.sha }}/index.html
+            [1]: https://my-asset-host.com/screenshot-gallery/${{ github.event.commit.commit.sha }}/index.html
