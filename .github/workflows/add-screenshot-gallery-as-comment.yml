@@ -10,7 +10,7 @@ jobs:
 
       - run: echo "Commit status is ${STATE}"
         env:
-          STATE: ${{ github.event.status.state }
+          STATE: ${{ github.event.status.state }}
 
       - name: Find relevant PR
         uses: jwalton/gh-find-current-pr@v1
@@ -21,7 +21,7 @@ jobs:
       - run: echo "Your PR is ${PR}"
         if: success() && steps.findPr.outputs.pr
         env:
-          PR: ${{ steps.findPr.outputs.pr }
+          PR: ${{ steps.findPr.outputs.pr }}
 
       - name: Check if there is an existing comment
         if: success() && steps.findPr.outputs.pr
