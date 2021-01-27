@@ -1,6 +1,20 @@
-name: add screenshot gallery link as comment
-on:
+name: Add a comment with a link to the screenshot gallery
 
+# Note about "status" events:
+# - The workflow must be merged to master, a status on a commit in any branch will still run the workflow found on master
+# - "status" events (like those from buildkite) are different to "check" events from Github actions.
+# - You can check for a specific status using it's context. Find it using the API:
+#     curl \
+#       --header "Accept: application/vnd.github.v3+json" \
+#       --header 'Authorization: token ${PERSONAL_API_TOKEN}' \
+#       https://api.github.com/repos/${ORG}/${REPO}/commits/${SHA}/status
+# - You can trigger a "status" event manually for testing:
+#     curl -request POST --url "https://api.github.com/repos/${ORG}/${REPO}/statuses/${SHA}" \
+#      --header "Authorization: token ${PERSONAL_API_TOKEN}" \
+#      --header 'content-type: application/json' \
+#      --data '{"state": "success", "description": "my status", "context": "some/unique/identifier", "target_url": "http://link-in-status/"}'
+
+on:
   - status
 
 jobs:
@@ -33,7 +47,7 @@ jobs:
           body-includes: '[View the Screenshot Gallery][1]'
 
       - name: Create a new comment
-        if: steps.find_comment.outputs.comment-id == 0
+        if: success() && steps.find_comment.outputs.comment-id == 0
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ steps.findPr.outputs.number }}
@@ -45,7 +59,7 @@ jobs:
             [1]: https://my-asset-host.com/screenshot-gallery/${{ github.event.sha }}/index.html
 
       - name: Update an existing comment
-        if: steps.find_comment.outputs.comment-id != 0
+        if: success() && steps.find_comment.outputs.comment-id != 0
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.find_comment.outputs.comment-id }}
