@@ -10,7 +10,7 @@ jobs:
 
       - name: Dump GitHub context
         env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
+          GITHUB_CONTEXT: ${{ toJSON(github.event) }}
         run: echo "$GITHUB_CONTEXT"
 
       - run: echo "Commit status is ${STATE}"
@@ -39,7 +39,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: '[View the Screenshot Gallery][1]'
 
-      - name: Create a mew comment
+      - name: Create a new comment
         if: steps.find_comment.outputs.comment-id == 0
         uses: peter-evans/create-or-update-comment@v1
         with:
