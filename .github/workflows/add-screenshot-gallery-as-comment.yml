@@ -14,7 +14,7 @@ jobs:
           CONTEXT: ${{ toJSON(github.event.context) }}
           STATE: ${{ toJSON(github.event.state) }}
           MESSAGE: ${{ toJSON(github.event.commit.commit.message) }}
-        run: echo "stuff: $SHA $STATE $CONTEXT $MESSAGE"
+        run: echo "stuff - $SHA $STATE $CONTEXT $MESSAGE"
 
       - run: echo "Commit status is ${STATE}"
         env:
